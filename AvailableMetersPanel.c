@@ -9,6 +9,7 @@ in the source distribution for its full text.
 #include "MetersPanel.h"
 
 #include "CPUMeter.h"
+#include "DDMeter.h"
 #include "Header.h"
 #include "ListItem.h"
 #include "Platform.h"
@@ -52,7 +53,7 @@ static inline void AvailableMetersPanel_addMeter(Header* header, Panel* panel, M
 static HandlerResult AvailableMetersPanel_eventHandler(Panel* super, int ch) {
    AvailableMetersPanel* this = (AvailableMetersPanel*) super;
    Header* header = this->header;
-   
+
    ListItem* selected = (ListItem*) Panel_getSelected(super);
    int param = selected->key & 0xff;
    int type = selected->key >> 16;
@@ -104,14 +105,14 @@ AvailableMetersPanel* AvailableMetersPanel_new(Settings* settings, Header* heade
    Panel* super = (Panel*) this;
    FunctionBar* fuBar = FunctionBar_newEnterEsc("Add   ", "Done   ");
    Panel_init(super, 1, 1, 1, 1, Class(ListItem), true, fuBar);
-   
+
    this->settings = settings;
    this->header = header;
    this->leftPanel = leftMeters;
    this->rightPanel = rightMeters;
    this->scr = scr;
 
-   Panel_setHeader(super, "Available meters");
+   Panel_setHeader(super, "Available Meters");
    for (int i = 1; Platform_meterTypes[i]; i++) {
       MeterClass* type = Platform_meterTypes[i];
       if (type != &CPUMeter_class) {
@@ -119,7 +120,15 @@ AvailableMetersPanel* AvailableMetersPanel_new(Settings* settings, Header* heade
          Panel_add(super, (Object*) ListItem_new(label, i << 16));
       }
    }
-   MeterClass* type = &CPUMeter_class;
+
+   MeterClass* type = &DDMeter_class;
+   for (int i = 1; i <= 5; i++) {
+      char buffer[50];
+      sprintf(buffer, "heho %s %d", type->uiName, i);
+      Panel_add(super, (Object*) ListItem_new(buffer, (1 << 16) + i));
+   }
+
+   type = &CPUMeter_class;
    int cpus = pl->cpuCount;
    if (cpus > 1) {
       Panel_add(super, (Object*) ListItem_new("CPU average", 0));

@@ -8,6 +8,7 @@ in the source distribution for its full text.
 
 #include "Platform.h"
 #include "CPUMeter.h"
+#include "DDMeter.h"
 #include "MemoryMeter.h"
 #include "SwapMeter.h"
 #include "TasksMeter.h"
@@ -102,6 +103,7 @@ ProcessFieldData Process_fields[] = {
 
 MeterClass* Platform_meterTypes[] = {
    &CPUMeter_class,
+   &DDMeter_class,
    &ClockMeter_class,
    &LoadAverageMeter_class,
    &LoadMeter_class,
