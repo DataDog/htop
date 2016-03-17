@@ -27,6 +27,11 @@ int Statsd_run(void *portno) {
   int optval; /* flag value for setsockopt */
   int n; /* message byte size */
 
+  char *tokstate;
+  char *metric;
+  char *valStr;
+  char *metricType;
+
   /* 
    * socket: create the parent socket 
    */
@@ -77,31 +82,30 @@ int Statsd_run(void *portno) {
       printf("ERROR in recvfromt\n");
       exit(1);
     }
-    /* 
-     * gethostbyaddr: determine who sent the datagram
-     */
-    hostp = gethostbyaddr((const char *)&clientaddr.sin_addr.s_addr, 
-        sizeof(clientaddr.sin_addr.s_addr), AF_INET);
-    if (hostp == NULL) {
-      printf("ERROR in gethostbyaddr\n");
-      exit(1);
-    }
-    hostaddrp = inet_ntoa(clientaddr.sin_addr);
-    if (hostaddrp == NULL) {
-      printf("ERROR in inet_ntoa\n");
-      exit(1);
-    }
-    printf("server received datagram from %s (%s)\n", 
-     hostp->h_name, hostaddrp);
-    printf("server received %d/%d bytes: %s\n", strlen(buf), n, buf);
 
+    metric = strtok_r(buf, ":", &tokstate);
+    if (metric == NULL) {
+      printf("ERROR no metric found\n");
+      continue;
+    }
+    valStr = strtok_r(NULL, "|", &tokstate);
+    if (valStr == NULL) {
+      printf("ERROR no value found\n");
+      continue;
+    }
+    metricType = strtok_r(NULL, "|", &tokstate);
+    if (metricType == NULL) {
+      printf("ERROR no metric type found\n");
+      continue;
+    }
+    printf("Got a metric: %s, val: %s, type: %s\n", metric, valStr, metricType);
   }
 
    pthread_exit(NULL);
-
 }
 
 void Statsd_init(int portno) {
+  // Statsd_run((void *)portno);
   pthread_t thread;
   int rc;
   rc = pthread_create(&thread, NULL, Statsd_run, (void *)portno);
