@@ -2,6 +2,6 @@
 
 #ifndef HEADER_Statsd
 #define HEADER_Statsd
-int Statsd_getMetric(const char* metricName);
+double Statsd_getMetric(const char* metricName);
 
 #endif

@@ -29,8 +29,8 @@ int DDMeter_attributes[] = {
 };
 
 static void DDMeter_setValues(Meter* this, char* buffer, int size) {
-   int val = Statsd_getMetric("postgres.inserts");
-   snprintf(buffer, size, "val: %d", val);
+   double val = Statsd_getMetric("postgres.inserts");
+   snprintf(buffer, size, "val: %f", val);
 }
 
 MeterClass DDMeter_class = {
