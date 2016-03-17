@@ -1,10 +1,7 @@
 /*
-htop - BatteryMeter.c
-(C) 2004-2011 Hisham H. Muhammad
-Released under the GNU GPL, see the COPYING file
-in the source distribution for its full text.
+htop - DDMeter.c
 
-This meter written by Ian P. Hands (iphands@gmail.com, ihands@redhat.com).
+This meter written by Pierre Manceron.
 */
 
 #include "DDMeter.h"
