@@ -143,5 +143,10 @@ void Statsd_shutdown() {
 
 
 double Statsd_getMetric(const char* metricName) {
-  return *(double *)Hashtable_get(metrics, hash((unsigned char *)metricName));
+  double *val = (double *)Hashtable_get(metrics, hash((unsigned char *)metricName));
+  if (val == NULL) {
+    return 0.0;
+  } else {
+    return *val;
+  }
 }
