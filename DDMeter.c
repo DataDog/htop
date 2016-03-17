@@ -14,9 +14,12 @@ This meter written by Pierre Manceron.
 #include <string.h>
 #include <stdlib.h>
 
+/*{
+#include "Meter.h"
+
+}*/
 
 int DDMeter_attributes[] = {
-   BATTERY
 };
 
 static void DDMeter_setValues(Meter* this, char* buffer, int size) {

@@ -3,12 +3,13 @@
 #ifndef HEADER_DDMeter
 #define HEADER_DDMeter
 /*
-htop - DDMeter.c
+htop - DDMeter.h
 
 This meter written by Pierre Manceron.
 */
 
 #include "Meter.h"
+
 
 extern int DDMeter_attributes[];
 
