@@ -74,17 +74,7 @@ static inline bool moveToNeighbor(MetersPanel* this, MetersPanel* neighbor, int 
             Meter* meter = (Meter*) Vector_take(this->meters, selected);
             Panel_remove(super, selected);
             Vector_insert(neighbor->meters, selected, meter);
-           if (As_Meter(meter) != &DDMeter_class) {
              Panel_insert(&(neighbor->super), selected, (Object*) Meter_toListItem(meter, false));
-           }
-           // If it's a DDMetric, display a different name
-            else
-            {
-              char buffer[50];
-              sprintf(buffer, "%s %s", Meter_uiName(meter), ddmetrics[meter->param]);
-              Panel_insert(&(neighbor->super), selected, (Object*) ListItem_new(buffer, (1 << 16) + meter->param));
-            }
-
             Panel_setSelected(&(neighbor->super), selected);
 
             MetersPanel_setMoving(neighbor, true);

@@ -42,7 +42,7 @@ MeterClass DDMeter_class = {
    .maxItems = METRICS_NUMBER,
    .total = 100.0,
    .attributes = DDMeter_attributes,
-   .name = "DD metrica!!",
-   .uiName = "DD metricb!!",
+   .name = "DD metric!!",
+   .uiName = "DD metric!!",
    .caption = "DD metricc!!: "
 };
