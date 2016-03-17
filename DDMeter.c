@@ -39,10 +39,10 @@ MeterClass DDMeter_class = {
    },
    .setValues = DDMeter_setValues,
    .defaultMode = TEXT_METERMODE,
-   .maxItems = 5,
+   .maxItems = METRICS_NUMBER,
    .total = 100.0,
    .attributes = DDMeter_attributes,
-   .name = "DD metric!!",
-   .uiName = "DD metric!!",
-   .caption = "DD metric!!: "
+   .name = "DD metrica!!",
+   .uiName = "DD metricb!!",
+   .caption = "DD metricc!!: "
 };
