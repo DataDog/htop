@@ -20,11 +20,15 @@ This meter written by Pierre Manceron.
 
 }*/
 
+#define METRICS_NUMBER 5
+#define METRIC_NAME_SIZE 256
+char ddmetrics[METRICS_NUMBER][METRIC_NAME_SIZE] = {"postgres.inserts", "postgres.inserts", "postgres.inserts", "postgres.inserts", "postgres.inserts"};
+
 int DDMeter_attributes[] = {
 };
 
 static void DDMeter_setValues(Meter* this, char* buffer, int size) {
-   double val = Statsd_getMetric("postgres.inserts");
+   double val = Statsd_getMetric(ddmetrics[this->param]);
    snprintf(buffer, size, "val: %f", val);
 }
 

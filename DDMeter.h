@@ -8,9 +8,12 @@ htop - DDMeter.h
 This meter written by Pierre Manceron.
 */
 
-
 #include "Meter.h"
 
+
+#define METRICS_NUMBER 5
+#define METRIC_NAME_SIZE 256
+extern char ddmetrics[METRICS_NUMBER][METRIC_NAME_SIZE];
 
 extern int DDMeter_attributes[];
 
