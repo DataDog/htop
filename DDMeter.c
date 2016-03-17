@@ -17,6 +17,11 @@ This meter written by Ian P. Hands (iphands@gmail.com, ihands@redhat.com).
 #include <string.h>
 #include <stdlib.h>
 
+/*{
+
+#include "Meter.h"
+
+}*/
 
 int DDMeter_attributes[] = {
    BATTERY

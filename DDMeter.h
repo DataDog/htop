@@ -11,7 +11,9 @@ in the source distribution for its full text.
 This meter written by Ian P. Hands (iphands@gmail.com, ihands@redhat.com).
 */
 
+
 #include "Meter.h"
+
 
 extern int DDMeter_attributes[];
 
