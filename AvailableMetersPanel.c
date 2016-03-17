@@ -115,16 +115,17 @@ AvailableMetersPanel* AvailableMetersPanel_new(Settings* settings, Header* heade
    Panel_setHeader(super, "Available Meters");
    for (int i = 1; Platform_meterTypes[i]; i++) {
       MeterClass* type = Platform_meterTypes[i];
-      if (type != &CPUMeter_class) {
+      // Do not dispay the meters for the CPU and the Datadog metrics, they zill be treated later
+      if (type != &CPUMeter_class && type != &DDMeter_class) {
          const char* label = type->description ? type->description : type->uiName;
          Panel_add(super, (Object*) ListItem_new(label, i << 16));
       }
    }
 
    MeterClass* type = &DDMeter_class;
-   for (int i = 1; i <= 5; i++) {
+   for (int i = 0; i < METRICS_NUMBER; i++) {
       char buffer[50];
-      sprintf(buffer, "heho %s %d", type->uiName, i);
+      sprintf(buffer, "%s %s", type->uiName, ddmetrics[i]);
       Panel_add(super, (Object*) ListItem_new(buffer, (1 << 16) + i));
    }
 

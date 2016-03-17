@@ -10,6 +10,7 @@ in the source distribution for its full text.
 #include <stdlib.h>
 #include <assert.h>
 #include "CRT.h"
+#include "DDMeter.h"
 
 /*{
 #include "Panel.h"
@@ -73,7 +74,7 @@ static inline bool moveToNeighbor(MetersPanel* this, MetersPanel* neighbor, int 
             Meter* meter = (Meter*) Vector_take(this->meters, selected);
             Panel_remove(super, selected);
             Vector_insert(neighbor->meters, selected, meter);
-            Panel_insert(&(neighbor->super), selected, (Object*) Meter_toListItem(meter, false));
+             Panel_insert(&(neighbor->super), selected, (Object*) Meter_toListItem(meter, false));
             Panel_setSelected(&(neighbor->super), selected);
 
             MetersPanel_setMoving(neighbor, true);
@@ -86,7 +87,7 @@ static inline bool moveToNeighbor(MetersPanel* this, MetersPanel* neighbor, int 
 
 static HandlerResult MetersPanel_eventHandler(Panel* super, int ch) {
    MetersPanel* this = (MetersPanel*) super;
-   
+
    int selected = Panel_getSelectedIndex(super);
    HandlerResult result = IGNORED;
    bool sideMove = false;
