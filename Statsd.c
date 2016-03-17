@@ -3,6 +3,8 @@
  * usage: udpserver <port>
  */
 
+#include "Hashtable.h"
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -15,6 +17,20 @@
 #include <pthread.h>
 
 #define BUFSIZE 1024
+
+struct Hashtable_ *metrics;
+
+
+unsigned long hash(unsigned char *str) {
+  unsigned long val = 5381;
+  int c;
+
+  while ((c = *str++))
+    val = ((val << 5) + val) + c; /* val * 33 + c */
+
+  return val;
+}
+
 
 int Statsd_run(void *portno) {
   int sockfd; /* socket */
@@ -30,6 +46,7 @@ int Statsd_run(void *portno) {
   char *tokstate;
   char *metric;
   char *valStr;
+  double val;
   char *metricType;
 
   /* 
@@ -93,18 +110,22 @@ int Statsd_run(void *portno) {
       printf("ERROR no value found\n");
       continue;
     }
+    val = strtod(valStr, NULL);
     metricType = strtok_r(NULL, "|", &tokstate);
     if (metricType == NULL) {
       printf("ERROR no metric type found\n");
       continue;
     }
     printf("Got a metric: %s, val: %s, type: %s\n", metric, valStr, metricType);
+    Hashtable_put(metrics, hash(metric), (void *)&val);
   }
 
    pthread_exit(NULL);
 }
 
 void Statsd_init(int portno) {
+  metrics = Hashtable_new(256, true);
+
   // Statsd_run((void *)portno);
   pthread_t thread;
   int rc;
@@ -115,11 +136,12 @@ void Statsd_init(int portno) {
   }
 }
 
+
 void Statsd_shutdown() {
   pthread_exit(NULL);
 }
 
 
 double Statsd_getMetric(const char* metricName) {
-  return 15.0;
+  return *(double *)Hashtable_get(metrics, hash(metricName));
 }
