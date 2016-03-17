@@ -32,9 +32,9 @@ unsigned long hash(unsigned char *str) {
 }
 
 
-int Statsd_run(void *portno) {
+void *Statsd_run(void *portno) {
   int sockfd; /* socket */
-  int clientlen; /* byte size of client's address */
+  unsigned int clientlen; /* byte size of client's address */
   struct sockaddr_in serveraddr; /* server's addr */
   struct sockaddr_in clientaddr; /* client addr */
   struct hostent *hostp; /* client host info */
@@ -117,7 +117,7 @@ int Statsd_run(void *portno) {
       continue;
     }
     printf("Got a metric: %s, val: %s, type: %s\n", metric, valStr, metricType);
-    Hashtable_put(metrics, hash(metric), (void *)&val);
+    Hashtable_put(metrics, hash((unsigned char *)metric), (void *)&val);
   }
 
    pthread_exit(NULL);
@@ -143,5 +143,5 @@ void Statsd_shutdown() {
 
 
 double Statsd_getMetric(const char* metricName) {
-  return *(double *)Hashtable_get(metrics, hash(metricName));
+  return *(double *)Hashtable_get(metrics, hash((unsigned char *)metricName));
 }
