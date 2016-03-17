@@ -123,7 +123,7 @@ AvailableMetersPanel* AvailableMetersPanel_new(Settings* settings, Header* heade
    }
 
    MeterClass* type = &DDMeter_class;
-   for (int i = 0; i <= METRICS_NUMBER; i++) {
+   for (int i = 0; i < METRICS_NUMBER; i++) {
       char buffer[50];
       sprintf(buffer, "%s %s", type->uiName, ddmetrics[i]);
       Panel_add(super, (Object*) ListItem_new(buffer, (1 << 16) + i));
