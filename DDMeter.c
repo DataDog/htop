@@ -5,6 +5,7 @@ This meter written by Pierre Manceron.
 */
 
 #include "DDMeter.h"
+#include "Statsd.h"
 
 #include "ProcessList.h"
 #include "CRT.h"
@@ -23,7 +24,8 @@ int DDMeter_attributes[] = {
 };
 
 static void DDMeter_setValues(Meter* this, char* buffer, int size) {
-   snprintf(buffer, size, "metric");
+   double val = Statsd_getMetric("postgres.inserts");
+   snprintf(buffer, size, "val: %f", val);
 }
 
 MeterClass DDMeter_class = {
