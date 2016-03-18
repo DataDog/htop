@@ -11,6 +11,12 @@
 
 struct Hashtable_ *metrics;
 
+typedef struct Metric {
+  char *name;
+  double currentVal;
+  double maxVal;
+} Metric;
+
 unsigned long hash(unsigned char *str);
 
 void *Statsd_run(void *portno);
