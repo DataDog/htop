@@ -124,7 +124,7 @@ void *Statsd_run(void *portno) {
 }
 
 void Statsd_init(int portno) {
-  metrics = Hashtable_new(256, true);
+  metrics = Hashtable_new(256, false);
 
   // Statsd_run((void *)portno);
   pthread_t thread;
