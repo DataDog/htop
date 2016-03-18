@@ -6,7 +6,6 @@ This meter written by Pierre Manceron.
 
 #include "DDMeter.h"
 #include "Statsd.h"
-#include "ClockMeter.h"
 
 #include "ProcessList.h"
 #include "CRT.h"
@@ -44,7 +43,7 @@ MeterClass DDMeter_class = {
    .defaultMode = TEXT_METERMODE,
    .maxItems = 1,
    .total = 100.0,
-   .attributes = ClockMeter_attributes,
+   .attributes = DDMeter_attributes,
    .name = "DD metric!!",
    .uiName = "DD metric!!",
    .caption = "DD metricc!!: "
