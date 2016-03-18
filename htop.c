@@ -190,9 +190,7 @@ int main(int argc, char** argv) {
    }
 #endif
    
-   if (flags.statsdPort != 0) {
-      Statsd_init(flags.statsdPort);
-   }
+   Statsd_init(flags.statsdPort);
 
    Process_setupColumnWidths();
    

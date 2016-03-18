@@ -150,6 +150,10 @@ void *Statsd_run(void *portno) {
 void Statsd_init(int portno) {
   metrics = Hashtable_new(256, false);
 
+  if (portno <= 0) {
+    return;
+  }
+
   // Statsd_run((void *)portno);
   pthread_t thread;
   int rc;
