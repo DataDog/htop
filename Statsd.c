@@ -111,21 +111,21 @@ void *Statsd_run(void *portno) {
 
     metricName = strtok_r(buf, ":", &tokstate);
     if (metricName == NULL) {
-      printf("ERROR no metric found\n");
+      // printf("ERROR no metric found\n");
       continue;
     }
     valStr = strtok_r(NULL, "|", &tokstate);
     if (valStr == NULL) {
-      printf("ERROR no value found\n");
+      // printf("ERROR no value found\n");
       continue;
     }
     val = strtod(valStr, NULL);
     metricType = strtok_r(NULL, "|", &tokstate);
     if (metricType == NULL) {
-      printf("ERROR no metric type found\n");
+      // printf("ERROR no metric type found\n");
       continue;
     }
-    printf("Got a metric: %s, val: %s, type: %s\n", metricName, valStr, metricType);
+    // printf("Got a metric: %s, val: %s, type: %s\n", metricName, valStr, metricType);
 
     hashKey = hash((unsigned char *)metricName);
     hashVal = Hashtable_get(metrics, hashKey);
