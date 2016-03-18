@@ -100,7 +100,7 @@ void *Statsd_run(void *portno) {
    */
   clientlen = sizeof(clientaddr);
   while (1) {
-
+    char tmpMetric[BUFSIZE];
     /*
      * recvfrom: receive a UDP datagram from a client
      */
@@ -138,7 +138,8 @@ void *Statsd_run(void *portno) {
     } else {
       metric = (Metric *) hashVal;
     }
-    metric->name = metricName;
+    strcpy(tmpMetric, metricName);
+    metric->name = tmpMetric;
     metric->currentVal = val;
     if (val > metric->maxVal) {
       metric->maxVal = val;
