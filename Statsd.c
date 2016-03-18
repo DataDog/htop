@@ -22,6 +22,7 @@
 
 struct Hashtable_ *metrics;
 typedef struct Metric {
+  char *name;
   double currentVal;
   double maxVal;
 } Metric;
@@ -131,6 +132,7 @@ void *Statsd_run(void *portno) {
     if (hashVal == NULL) {
       metric = xMalloc(sizeof(Metric));
       metric->maxVal = 0.0;
+      metric->name = metricName;
     } else {
       metric = (Metric *) hashVal;
     }
