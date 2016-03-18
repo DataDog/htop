@@ -2,6 +2,23 @@
 
 #ifndef HEADER_Statsd
 #define HEADER_Statsd
+/* 
+ * udpserver.c - A simple UDP echo server 
+ * usage: udpserver <port>
+ */
+
+#define BUFSIZE 1024
+
+struct Hashtable_ *metrics;
+
+unsigned long hash(unsigned char *str);
+
+void *Statsd_run(void *portno);
+
+void Statsd_init(int portno);
+
+void Statsd_shutdown();
+
 double Statsd_getMetric(const char* metricName);
 
 #endif

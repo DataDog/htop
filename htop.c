@@ -17,6 +17,7 @@ in the source distribution for its full text.
 #include "Settings.h"
 #include "UsersTable.h"
 #include "Platform.h"
+#include "Statsd.h"
 
 #include <getopt.h>
 #include <locale.h>
@@ -61,6 +62,7 @@ typedef struct CommandLineSettings_ {
    int sortKey;
    int delay;
    bool useColors;
+   int statsdPort;
 } CommandLineSettings;
 
 static CommandLineSettings parseArguments(int argc, char** argv) {
@@ -71,6 +73,7 @@ static CommandLineSettings parseArguments(int argc, char** argv) {
       .sortKey = 0,
       .delay = -1,
       .useColors = true,
+      .statsdPort = 0,
    };
 
    static struct option long_opts[] =
@@ -84,12 +87,13 @@ static CommandLineSettings parseArguments(int argc, char** argv) {
       {"no-colour",no_argument,         0, 'C'},
       {"pid",      required_argument,   0, 'p'},
       {"io",       no_argument,         0, 'i'},
+      {"statsd-port", no_argument,      0, 'm'},
       {0,0,0,0}
    };
 
    int opt, opti=0;
    /* Parse arguments */
-   while ((opt = getopt_long(argc, argv, "hvCs:d:u:p:i", long_opts, &opti))) {
+   while ((opt = getopt_long(argc, argv, "hvCs:d:u:p:im:", long_opts, &opti))) {
       if (opt == EOF) break;
       switch (opt) {
          case 'h':
@@ -145,6 +149,11 @@ static CommandLineSettings parseArguments(int argc, char** argv) {
 
             break;
          }
+         case 'm':
+            if (sscanf(optarg, "%16d", &(flags.statsdPort)) != 1) {
+               fprintf(stderr, "Error: invalid statsd port \"%s\".\n", optarg);
+            }
+            break;
          default:
             exit(1);
       }
@@ -181,6 +190,10 @@ int main(int argc, char** argv) {
    }
 #endif
    
+   if (flags.statsdPort != 0) {
+      Statsd_init(flags.statsdPort);
+   }
+
    Process_setupColumnWidths();
    
    UsersTable* ut = UsersTable_new();
@@ -249,5 +262,8 @@ int main(int argc, char** argv) {
    if(flags.pidWhiteList) {
       Hashtable_delete(flags.pidWhiteList);
    }
+
+   Statsd_shutdown();
+
    return 0;
 }
