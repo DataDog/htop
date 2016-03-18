@@ -109,6 +109,7 @@ typedef enum ColorElements_ {
    CLOCK,
    HELP_BOLD,
    HOSTNAME,
+   DDMETRIC,
    CPU_NICE,
    CPU_NICE_TEXT,
    CPU_NORMAL,
@@ -213,6 +214,7 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [CHECK_MARK] = A_BOLD,
       [CHECK_TEXT] = A_NORMAL,
       [HOSTNAME] = A_BOLD,
+      [DDMETRIC] = A_NORMAL,
       [CPU_NICE] = ColorPair(Blue,Black),
       [CPU_NICE_TEXT] = A_BOLD | ColorPair(Blue,Black),
       [CPU_NORMAL] = ColorPair(Green,Black),
@@ -271,6 +273,7 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [CHECK_BOX] = A_BOLD,
       [CHECK_MARK] = A_NORMAL,
       [CHECK_TEXT] = A_NORMAL,
+      [DDMETRIC] = A_NORMAL,
       [HOSTNAME] = A_BOLD,
       [CPU_NICE] = A_NORMAL,
       [CPU_NICE_TEXT] = A_NORMAL,
@@ -331,6 +334,7 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [CHECK_MARK] = ColorPair(Black,White),
       [CHECK_TEXT] = ColorPair(Black,White),
       [HOSTNAME] = ColorPair(Black,White),
+      [DDMETRIC] = ColorPair(Black,White),
       [CPU_NICE] = ColorPair(Cyan,White),
       [CPU_NICE_TEXT] = ColorPair(Cyan,White),
       [CPU_NORMAL] = ColorPair(Green,White),
@@ -390,6 +394,7 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [CHECK_MARK] = ColorPair(Black,Black),
       [CHECK_TEXT] = ColorPair(Black,Black),
       [HOSTNAME] = ColorPair(White,Black),
+      [DDMETRIC] = ColorPair(Black,White),
       [CPU_NICE] = ColorPair(Cyan,Black),
       [CPU_NICE_TEXT] = ColorPair(Cyan,Black),
       [CPU_NORMAL] = ColorPair(Green,Black),
@@ -449,6 +454,7 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [CHECK_MARK] = A_BOLD | ColorPair(White,Blue),
       [CHECK_TEXT] = A_NORMAL | ColorPair(White,Blue),
       [HOSTNAME] = ColorPair(White,Blue),
+      [DDMETRIC] = ColorPair(White,Blue),
       [CPU_NICE] = A_BOLD | ColorPair(Cyan,Blue),
       [CPU_NICE_TEXT] = A_BOLD | ColorPair(Cyan,Blue),
       [CPU_NORMAL] = A_BOLD | ColorPair(Green,Blue),
@@ -508,6 +514,7 @@ int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [CHECK_MARK] = A_BOLD | ColorPair(Green,Black),
       [CHECK_TEXT] = ColorPair(Cyan,Black),
       [HOSTNAME] = ColorPair(Green,Black),
+      [DDMETRIC] = ColorPair(Green,Black),
       [CPU_NICE] = ColorPair(Blue,Black),
       [CPU_NICE_TEXT] = A_BOLD | ColorPair(Blue,Black),
       [CPU_NORMAL] = ColorPair(Green,Black),
@@ -552,12 +559,12 @@ void CRT_init(int delay, int colorScheme) {
    }
    CRT_colors = CRT_colorSchemes[colorScheme];
    CRT_colorScheme = colorScheme;
-   
+
    for (int i = 0; i < LAST_COLORELEMENT; i++) {
       unsigned int color = CRT_colorSchemes[COLORSCHEME_DEFAULT][i];
       CRT_colorSchemes[COLORSCHEME_BROKENGRAY][i] = color == (A_BOLD | ColorPair(Black,Black)) ? ColorPair(White,Black) : color;
    }
-   
+
    halfdelay(CRT_delay);
    nonl();
    intrflush(stdscr, false);
@@ -666,7 +673,7 @@ void CRT_setColors(int colorScheme) {
          for (int j = 0; j < 8; j++)
             init_pair((7-i)*8+j, i, j);
    } else {
-      for (int i = 0; i < 8; i++) 
+      for (int i = 0; i < 8; i++)
          for (int j = 0; j < 8; j++)
             init_pair((7-i)*8+j, i, (j==0?-1:j));
    }

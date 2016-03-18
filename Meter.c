@@ -296,12 +296,15 @@ static void BarMeterMode_draw(Meter* this, int x, int y, int w) {
    }
    char bar[w + 1];
 
+
    int blockSizes[10];
    for (int i = 0; i < w; i++)
       bar[i] = ' ';
 
    const size_t barOffset = w - MIN((int)strlen(buffer), w);
    snprintf(bar + barOffset, w - barOffset + 1, "%s", buffer);
+
+
 
    // First draw in the bar[] buffer...
    int offset = 0;

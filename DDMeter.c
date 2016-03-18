@@ -22,14 +22,15 @@ This meter written by Pierre Manceron.
 
 #define METRICS_NUMBER 5
 #define METRIC_NAME_SIZE 256
-char ddmetrics[METRICS_NUMBER][METRIC_NAME_SIZE] = {"postgres.inserts", "postgres.inserts", "postgres.inserts", "postgres.inserts", "postgres.inserts"};
+char ddmetrics[METRICS_NUMBER][METRIC_NAME_SIZE] = {"postgres.inserts", "cpu.load", "disk.usage", "postgres.reads", "postgres.writes"};
 
 int DDMeter_attributes[] = {
+DDMETRIC
 };
 
 static void DDMeter_setValues(Meter* this, char* buffer, int size) {
-   double val = Statsd_getMetric(ddmetrics[this->param]);
-   snprintf(buffer, size, "val: %f", val);
+  double val = Statsd_getMetric(ddmetrics[this->param]);
+  snprintf(buffer, size, "%5.1f", val);
 }
 
 MeterClass DDMeter_class = {
@@ -39,7 +40,7 @@ MeterClass DDMeter_class = {
    },
    .setValues = DDMeter_setValues,
    .defaultMode = TEXT_METERMODE,
-   .maxItems = METRICS_NUMBER,
+   .maxItems = 1,
    .total = 100.0,
    .attributes = DDMeter_attributes,
    .name = "DD metric!!",
