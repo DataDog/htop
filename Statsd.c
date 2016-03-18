@@ -3,6 +3,8 @@
  * usage: udpserver <port>
  */
 
+#include "XAlloc.h"
+#include "Statsd.h"
 #include "Hashtable.h"
 
 #include <stdio.h>
@@ -19,7 +21,10 @@
 #define BUFSIZE 1024
 
 struct Hashtable_ *metrics;
-
+typedef struct Metric {
+  double currentVal;
+  double maxVal;
+} Metric;
 
 unsigned long hash(unsigned char *str) {
   unsigned long val = 5381;
@@ -44,10 +49,13 @@ void *Statsd_run(void *portno) {
   int n; /* message byte size */
 
   char *tokstate;
-  char *metric;
+  char *metricName;
   char *valStr;
   double val;
   char *metricType;
+  int hashKey;
+  void *hashVal;
+  Metric* metric;
 
   /* 
    * socket: create the parent socket 
@@ -100,8 +108,8 @@ void *Statsd_run(void *portno) {
       exit(1);
     }
 
-    metric = strtok_r(buf, ":", &tokstate);
-    if (metric == NULL) {
+    metricName = strtok_r(buf, ":", &tokstate);
+    if (metricName == NULL) {
       printf("ERROR no metric found\n");
       continue;
     }
@@ -116,8 +124,22 @@ void *Statsd_run(void *portno) {
       printf("ERROR no metric type found\n");
       continue;
     }
-    printf("Got a metric: %s, val: %s, type: %s\n", metric, valStr, metricType);
-    Hashtable_put(metrics, hash((unsigned char *)metric), (void *)&val);
+    printf("Got a metric: %s, val: %s, type: %s\n", metricName, valStr, metricType);
+
+    hashKey = hash((unsigned char *)metricName);
+    hashVal = Hashtable_get(metrics, hashKey);
+    if (hashVal == NULL) {
+      metric = xMalloc(sizeof(Metric));
+      metric->maxVal = 0.0;
+    } else {
+      metric = (Metric *) hashVal;
+    }
+    metric->currentVal = val;
+    if (val > metric->maxVal) {
+      metric->maxVal = val;
+    }
+
+    Hashtable_put(metrics, hashKey, (void *)metric);
   }
 
    pthread_exit(NULL);
@@ -143,10 +165,12 @@ void Statsd_shutdown() {
 
 
 double Statsd_getMetric(const char* metricName) {
-  double *val = (double *)Hashtable_get(metrics, hash((unsigned char *)metricName));
-  if (val == NULL) {
+  void *hashVal = (double *)Hashtable_get(metrics, hash((unsigned char *)metricName));
+  Metric *m;
+  if (hashVal == NULL) {
     return 0.0;
   } else {
-    return *val;
+    m = (Metric *) hashVal;
+    return m->currentVal;
   }
 }
