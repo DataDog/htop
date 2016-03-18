@@ -7,7 +7,9 @@ in the source distribution for its full text.
 
 #include "AvailableMetersPanel.h"
 #include "MetersPanel.h"
-
+#include "Action.h"
+#include "DDUtils.h"
+#include "Statsd.h"
 #include "CPUMeter.h"
 #include "DDMeter.h"
 #include "Header.h"
@@ -128,6 +130,8 @@ AvailableMetersPanel* AvailableMetersPanel_new(Settings* settings, Header* heade
       sprintf(buffer, "%s %s", type->uiName, ddmetrics[i]);
       Panel_add(super, (Object*) ListItem_new(buffer, (1 << 16) + i));
    }
+
+   Hashtable_foreach(metrics, addMetricToPanel, super);
 
    type = &CPUMeter_class;
    int cpus = pl->cpuCount;

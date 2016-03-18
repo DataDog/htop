@@ -2,8 +2,8 @@
 
 #ifndef HEADER_Statsd
 #define HEADER_Statsd
-/* 
- * udpserver.c - A simple UDP echo server 
+/*
+ * udpserver.c - A simple UDP echo server
  * usage: udpserver <port>
  */
 

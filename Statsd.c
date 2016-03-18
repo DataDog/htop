@@ -1,5 +1,5 @@
-/* 
- * udpserver.c - A simple UDP echo server 
+/*
+ * udpserver.c - A simple UDP echo server
  * usage: udpserver <port>
  */
 
@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <netdb.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -21,11 +21,7 @@
 #define BUFSIZE 1024
 
 struct Hashtable_ *metrics;
-typedef struct Metric {
-  char *name;
-  double currentVal;
-  double maxVal;
-} Metric;
+
 
 unsigned long hash(unsigned char *str) {
   unsigned long val = 5381;
@@ -58,21 +54,21 @@ void *Statsd_run(void *portno) {
   void *hashVal;
   Metric* metric;
 
-  /* 
-   * socket: create the parent socket 
+  /*
+   * socket: create the parent socket
    */
   sockfd = socket(AF_INET, SOCK_DGRAM, 0);
   if (sockfd < 0) {
       printf("ERROR opening socket\n");
       exit(1);
   }
-  /* setsockopt: Handy debugging trick that lets 
-   * us rerun the server immediately after we kill it; 
-   * otherwise we have to wait about 20 secs. 
-   * Eliminates "ERROR on binding: Address already in use" error. 
+  /* setsockopt: Handy debugging trick that lets
+   * us rerun the server immediately after we kill it;
+   * otherwise we have to wait about 20 secs.
+   * Eliminates "ERROR on binding: Address already in use" error.
    */
   optval = 1;
-  setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, 
+  setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR,
        (const void *)&optval , sizeof(int));
 
   /*
@@ -83,16 +79,16 @@ void *Statsd_run(void *portno) {
   serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
   serveraddr.sin_port = htons((unsigned short)portno);
 
-  /* 
-   * bind: associate the parent socket with a port 
+  /*
+   * bind: associate the parent socket with a port
    */
-  if (bind(sockfd, (struct sockaddr *) &serveraddr, 
+  if (bind(sockfd, (struct sockaddr *) &serveraddr,
      sizeof(serveraddr)) < 0)  {
       printf("ERROR on binding\n");
       exit(1);
   }
 
-  /* 
+  /*
    * main loop: wait for a datagram, then echo it
    */
   clientlen = sizeof(clientaddr);
